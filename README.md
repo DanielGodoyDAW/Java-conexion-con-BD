@@ -1,51 +1,54 @@
-```markdown
 # ZonaFit
 
-Proyecto Java (IDEA) — aplicación con conexión a base de datos.
+Proyecto Java (IDEA) — conexión básica a base de datos con JDBC.
 
-## Resumen
-Breve descripción del propósito del proyecto.
+Resumen
+- Aplicación de ejemplo que muestra una conexión simple a una base de datos mediante JDBC.
+- Contiene operaciones CRUD implementadas en la clase ClienteDAO:
+  - listarClientes()   -> SELECT
+  - buscarClientePorID -> SELECT con parámetro
+  - agregarCliente()   -> INSERT
+  - modificarCliente() -> UPDATE
+  - eliminarCliente()  -> DELETE
 
-## Requisitos
-- Java 11+ (o la versión que uses)
-- Maven o Gradle (indica cuál)
-- Base de datos (MySQL/Postgres/otro) — indica versión
+Estructura principal
+- src/main/java/zona_fit/conexion/Conexion.java
+- src/main/java/zona_fit/datos/ClienteDAO.java
+- src/main/java/zona_fit/datos/IClienteDAO.java
+- src/main/java/zona_fit/dominio/Cliente.java
+- src/main/java/zona_fit/presentacion/ZonaFitApp.java
 
-## Configuración de la base de datos
-No incluyas credenciales reales en el repositorio. Usa variables de entorno o un archivo de ejemplo.
-
-Ejemplo: application.properties.example
+Configuración de la conexión (JDBC)
+- Este proyecto no usa Spring; la conexión se gestiona directamente en la clase Conexion.
+- Edita zona_fit/conexion/Conexion.java y ajusta la URL JDBC, usuario y contraseña según tu base de datos.
+- Ejemplo típico (MySQL) dentro de Conexion.java:
+```java
+private static final String URL = "jdbc:mysql://localhost:3306/zonafit";
+private static final String USER = "tu_usuario";
+private static final String PASS = "tu_contrasena";
 ```
-spring.datasource.url=jdbc:mysql://localhost:3306/zonafit
-spring.datasource.username=usuario_ejemplo
-spring.datasource.password=contrasena_ejemplo
+- Asegúrate de tener en el classpath el driver JDBC correspondiente (ej. con Maven: dependencia mysql-connector-java).
+
+Ejecución
+- Desde el IDE (IntelliJ): ejecuta la clase con main que prefieras (por ejemplo zona_fit.datos.ClienteDAO o zona_fit.presentacion.ZonaFitApp).
+- Desde línea de comandos con Maven (requiere plugin exec o ejecutar el JAR empaquetado). Ejemplo usando el plugin exec:
 ```
-
-Copia ese archivo a application.properties localmente (no subirlo) o configura las variables de entorno.
-
-## Ejecutar
-Con Maven:
+mvn clean compile exec:java -Dexec.mainClass="zona_fit.datos.ClienteDAO"
+```
+O empaqueta y ejecuta:
 ```
 mvn clean package
-mvn spring-boot:run
+java -cp target/<tu-artifact>.jar zona_fit.datos.ClienteDAO
 ```
+(ajusta <tu-artifact>.jar según el nombre que genere tu pom.xml)
 
-Con Gradle:
-```
-./gradlew build
-./gradlew bootRun
-```
+Notas de seguridad y buenas prácticas
+- No subas credenciales al repositorio. Si vas a mantener datos de configuración, usa variables de entorno o un archivo local que esté en .gitignore.
+- Comprueba que .gitignore incluye /target, ficheros de IDE (.iml, .idea), y cualquier archivo con credenciales.
+- Si en algún momento subiste credenciales por error, dímelo y te explico cómo eliminarlas del historial.
 
-## Estructura
-- src/main/java/zona_fit/conexion
-- src/main/java/zona_fit/datos
-- src/main/java/zona_fit/dominio
-- src/main/java/zona_fit/presentacion
+Ejemplo rápido de uso en ClienteDAO (lo que hace el main)
+- El main de ClienteDAO muestra cómo usar los métodos CRUD (listar, buscar, agregar, modificar, eliminar). Puedes descomentar los bloques que necesites para probar cada operación.
 
-## Notas
-- Evita subir /target, archivos .class, .iml, y archivos con credenciales.
-- Si necesitas borrar archivos ya subidos (como target o application.properties), sigue las instrucciones abajo.
-
-## Licencia
-MIT
-```
+Licencia
+- MIT 
